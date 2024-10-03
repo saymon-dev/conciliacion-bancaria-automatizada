@@ -67,11 +67,12 @@ Este proyecto implementa un sistema automatizado para la conciliación bancaria 
    ```javascript
    var folderIdInputEstado = 'ID_DE_LA_CARPETA_DE_ENTRADA_BANCO_ESTADO';
    var folderIdInputBCI = 'ID_DE_LA_CARPETA_DE_ENTRADA_BANCO_BCI';
-
+```
   En los archivos `process_bci.js` y `process_estado.js`, actualiza los IDs de las carpetas de salida:
   
   ```javascript
   var folderIdOutput = 'ID_DE_LA_CARPETA_DE_PROCESADOS';
+```
 
 ### 4. **Desplegar la Aplicación**:
   Publica el proyecto en Google Apps Script como una aplicación web. Configura el acceso para que "Cualquiera, incluso anónimos" pueda acceder a la web, pero limita la funcionalidad de     subida de archivos a usuarios con dominio @hyl.cl.
