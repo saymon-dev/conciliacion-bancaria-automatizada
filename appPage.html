@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conciliación Bancaria - Subir y Procesar Archivo</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+
+      /* Estilo para la pestaña activa */
+      .nav-tabs .nav-link.active {
+        background-color: #0D6EFD; /* Fondo de la pestaña activa */
+        color: white !important;   /* Letras blancas para la pestaña activa */
+      }
+
+      /* Estilo para las pestañas inactivas */
+      .nav-tabs .nav-link {
+        background-color: white;   /* Fondo blanco para pestañas inactivas */
+        color: black !important;   /* Letras negras para pestañas inactivas */
+        border: 1px solid #dee2e6; /* Borde para las pestañas */
+      }
+
+      .background-img {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: blur(3px);
+        z-index: -1;
+      }
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: RGB(22, 33, 54, 0.5);
+        z-index: 0;
+      }
+      .container {
+        position: relative;
+        z-index: 1;
+        max-width: 900px;
+        margin-top: 50px;
+      }
+      .card-header {
+        background-color: #0D6EFD;
+        color: white;
+      }
+      .btn-subir-procesar {
+        width: 100%;
+      }
+      .alert {
+        margin-top: 15px;
+      }
+      .row {
+        margin-bottom: 20px;
+      }
+      /* Estilo para welcomeMessage */
+      #welcomeMessage {
+        position: fixed;
+        top: 10px;
+        right: 20px;
+        padding: 10px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+      }
+      /* Estilos para la disposición de subir y procesar archivos */
+      .col-md-6 {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      @media (max-width: 768px) {
+        .col-md-6 {
+          margin-bottom: 20px;
+        }
+      }
+      .progress {
+        height: 25px;
+        margin-top: 10px;
+      }
+
+      .progress-bar {
+        transition: width 3s ease;
+      }
+
+      #logoText {
+      font-family: "Helvetica Neue"; /* Fuente serif personalizada */
+      font-size: 18px; /* Tamaño grande para hacerlo visible */
+      color: white; /* Un verde oscuro similar */
+      font-weight: bold; /* Negrita para el grosor */
+      position: fixed; /* Posición relativa para el subrayado */
+      padding-bottom: 14px;
+    }
+
+    #logoText::after {
+      content: ""; /* El contenido del subrayado */
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 14px; /* Posición justo debajo del texto */
+      height: 2px; /* Grosor de la línea */
+      background-color: #064635; /* Mismo verde oscuro */
+    }
+
+    </style>
+  </head>
+
+  <body>
+  <img src="https://www.hyl.cl/assets/img/inicio_bg.jpg" alt="Background" class="background-img">
+
+  <div class="container">
+    <div class="overlay"><!-- Logo a la izquierda -->
+      <div id="logoContainer" class="text-start" style="margin-top: 21px; margin-left: 35px;">
+        <img id="logoImage" class="img-fluid" src="https://images.squarespace-cdn.com/content/v1/5d5ad72aff86bf0001ff67e7/1606996439406-WJST1TK6DAYC6SY330IJ/logo_verde_ovalo.png?format=1500w" alt="Logo" style="max-width: 100px; height: auto; margin-left: 30px;">
+        <div id="logoText" class="text-start">auditores consultores</div> <!-- Aplica el estilo al texto -->
+      </div>
+    </div>
+  </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div id="welcomeMessage" class="d-flex align-items-center">
+          <img id="profilePicture" class="rounded-circle me-2" src="<?= photoUrl; ?>?t=<?= new Date().getTime(); ?>" alt="Foto de perfil" width="40" height="40">
+
+          Bienvenido al sistema,&nbsp;<span id="emailUsuario"><?= email ?></span>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-5" style="top: 42px;">
+    <!-- Comienzo del sistema de pestañas -->
+    <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="banco-estado-tab" data-bs-toggle="tab" data-bs-target="#banco-estado" type="button" role="tab" aria-controls="banco-estado" aria-selected="true">
+        <!-- Logo para Banco Estado -->
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhVzJ-NCpt9XvyQwszGnhn6kyD1dfIrdqh4g&s" alt="Logo Banco Estado" width="20" height="20" class="me-2">Banco Estado
+      </button>
+      </li>
+      <li class="nav-item" role="presentation">
+      <button class="nav-link" id="banco-bci-tab" data-bs-toggle="tab" data-bs-target="#banco-bci" type="button" role="tab" aria-controls="banco-bci" aria-selected="false">
+        <!-- Logo para Banco BCI -->
+        <img src="https://d1nxzqpcg2bym0.cloudfront.net/google_play/cl.bci.app.personas/5466c12a-c2b6-11e8-983c-1982e5a21e97/128x128" alt="Logo Banco BCI" width="20" height="20" class="me-2">Banco BCI
+      </button>
+      </li>
+    </ul>
+
+    <div class="tab-content bg-white" id="myTabContent">
+      <!-- Tab para Banco Estado -->
+      <div class="tab-pane fade show active" id="banco-estado" role="tabpanel" aria-labelledby="banco-estado-tab">
+        <div class="card">
+          <div class="card-header text-center">
+            <h3 class="card-title">Conciliación Banco Estado</h3>
+          </div>
+          <div class="card-body text-center">
+            <!-- Mensajes de error -->
+            <div id="errorMessageEstado" class="alert alert-danger d-none" role="alert">
+              Solo puedes usar correos con el dominio @hyl.cl
+            </div>
+            <!-- Formulario de Subida -->
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <h4>Subir Archivo</h4>
+                <form id="uploadFormEstado">
+                  <div class="mb-3">
+                    <label for="fileUploadEstado" class="form-label">Seleccionar archivo</label>
+                    <input type="file" class="form-control" id="fileUploadEstado" required>
+                  </div>
+                  <button type="button" class="btn btn-primary btn-subir-procesar" onclick="uploadFile('Estado')">Subir Archivo</button>
+                </form>
+                <div id="progressUploadEstado" class="alert alert-info d-none" role="alert">Subiendo archivo...</div>
+                <div id="messageUploadEstado" class="alert alert-success d-none" role="alert"></div>
+              </div>
+
+              <!-- Formulario de Procesamiento -->
+              <div class="col-md-6">
+                <h4>Procesar Archivo</h4>
+                <div id="progressProcessEstado" class="alert alert-warning d-none mt-3" role="alert">Procesando archivo...</div>
+                <button type="button" class="btn btn-primary btn-subir-procesar mt-3" id="processButtonEstado" disabled onclick="procesarArchivo('Estado')">Procesar Archivo</button>
+                <div id="messageProcessEstado" class="alert alert-success d-none mt-3" role="alert"></div>
+              </div>
+            </div>
+
+            <!-- Botón de Conciliación -->
+            <div class="row mt-4">
+              <div class="col-12">
+                <button type="button" class="btn btn-success btn-lg w-100" id="conciliarButtonEstado" disabled onclick="conciliarRegistros('Estado')" style="margin: 20px 0;">Conciliar Registros</button>
+                <div id="progressConciliarEstado" class="alert alert-warning d-none mt-3" role="alert">Conciliando registros...</div>
+                <div id="messageConciliarEstado" class="alert alert-success d-none mt-3" role="alert"></div>
+                <div class="progress d-none" id="progressBarContainerEstado">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" id="progressBarEstado">0%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab para Banco BCI -->
+      <div class="tab-pane fade" id="banco-bci" role="tabpanel" aria-labelledby="banco-bci-tab">
+        <div class="card">
+          <div class="card-header text-center">
+            <h3 class="card-title">Conciliación Banco BCI</h3>
+          </div>
+          <div class="card-body text-center">
+            <div id="errorMessageBCI" class="alert alert-danger d-none" role="alert">
+              Solo puedes usar correos con el dominio @hyl.cl
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <h4>Subir Archivo</h4>
+                <form id="uploadFormBCI">
+                  <div class="mb-3">
+                    <label for="fileUploadBCI" class="form-label">Seleccionar archivo</label>
+                    <input type="file" class="form-control" id="fileUploadBCI" required>
+                  </div>
+                  <button type="button" class="btn btn-primary btn-subir-procesar" onclick="uploadFile('BCI')">Subir Archivo</button>
+                </form>
+                <div id="progressUploadBCI" class="alert alert-info d-none" role="alert">Subiendo archivo...</div>
+                <div id="messageUploadBCI" class="alert alert-success d-none" role="alert"></div>
+              </div>
+
+              <div class="col-md-6">
+                <h4>Procesar Archivo</h4>
+                <div id="progressProcessBCI" class="alert alert-warning d-none mt-3" role="alert">Procesando archivo...</div>
+                <button type="button" class="btn btn-primary btn-subir-procesar mt-3" id="processButtonBCI" disabled onclick="procesarArchivo('BCI')">Procesar Archivo</button>
+                <div id="messageProcessBCI" class="alert alert-success d-none mt-3" role="alert"></div>
+              </div>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-12">
+                <button type="button" class="btn btn-success btn-lg w-100" id="conciliarButtonBCI" disabled onclick="conciliarRegistros('BCI')" style="margin: 20px 0;">Conciliar Registros</button>
+                <div id="progressConciliarBCI" class="alert alert-warning d-none mt-3" role="alert">Conciliando registros...</div>
+                <div id="messageConciliarBCI" class="alert alert-success d-none mt-3" role="alert"></div>
+                <div class="progress d-none" id="progressBarContainerBCI">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" id="progressBarBCI">0%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript para manejar el flujo de la aplicación -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        google.script.run.withSuccessHandler(function(userInfo) {
+          const { email, photoUrl } = userInfo;
+
+          if (email.endsWith('@hyl.cl')) {
+            document.getElementById('welcomeMessage').classList.remove('d-none');
+            document.getElementById('emailUsuario').textContent = email;
+
+            if (photoUrl) {
+              document.getElementById('profilePicture').src = photoUrl;
+            } else {
+              document.getElementById('profilePicture').src = 'https://via.placeholder.com/40';
+            }
+          } else {
+            document.getElementById('errorMessageEstado').classList.remove('d-none');
+            document.getElementById('errorMessageBCI').classList.remove('d-none');
+            document.querySelectorAll('button').forEach(button => button.disabled = true);
+          }
+        }).getUserInfo();
+      });
+
+      function uploadFile(banco) {
+        var fileInput = document.getElementById('fileUpload' + banco);
+        var file = fileInput.files[0];
+
+        if (!file) {
+          alert('Por favor, selecciona un archivo.');
+          return;
+        }
+
+        document.getElementById('progressUpload' + banco).classList.remove('d-none');
+        document.getElementById('messageUpload' + banco).classList.add('d-none');
+
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var fileContent = e.target.result;
+          google.script.run.withSuccessHandler(function(response) {
+            document.getElementById('progressUpload' + banco).classList.add('d-none');
+            document.getElementById('messageUpload' + banco).innerHTML = response.message + ' <a href="' + response.sheetUrl + '" target="_blank">Ver archivo subido</a>';
+            document.getElementById('messageUpload' + banco).classList.remove('d-none');
+            localStorage.setItem('sheetId' + banco, response.sheetId);
+            document.getElementById("processButton" + banco).disabled = false;
+          }).withFailureHandler(function(error) {
+            document.getElementById('progressUpload' + banco).classList.add('d-none');
+            alert('Error al subir el archivo: ' + error.message);
+          }).uploadToDrive(file.name, fileContent, banco);
+        };
+
+        reader.readAsDataURL(file);
+      }
+
+      function procesarArchivo(banco) {
+        var sheetId = localStorage.getItem('sheetId' + banco);
+
+        if (!sheetId) {
+          alert('Por favor, sube un archivo antes de procesarlo.');
+          return;
+        }
+
+        document.getElementById('progressProcess' + banco).classList.remove('d-none');
+        document.getElementById('messageProcess' + banco).classList.add('d-none');
+
+        google.script.run.withSuccessHandler(function(response) {
+          // Si el procesamiento fue exitoso
+          if (response.success) {
+            // Guardar el ID de la hoja procesada en el localStorage
+            localStorage.setItem('processedSheetId' + banco, response.processedSheetId);
+
+            // Ocultar la barra de progreso
+            document.getElementById('progressProcess' + banco).classList.add('d-none');
+
+            // Mostrar el mensaje de éxito en alerta verde
+            var messageDiv = document.getElementById('messageProcess' + banco);
+            messageDiv.classList.remove('d-none', 'alert-danger');
+            messageDiv.classList.add('alert-success');
+            messageDiv.innerHTML = response.message + ' <br>';
+
+            // Crear el enlace para ver el archivo procesado
+            var link = document.createElement('a');
+            link.href = response.processedFileUrl;
+            link.textContent = 'Ver archivo procesado';
+            link.target = '_blank'; // Para abrir en una nueva pestaña
+            messageDiv.appendChild(link);
+
+            // Habilitar el botón de conciliación
+            document.getElementById("conciliarButton" + banco).disabled = false;
+          } else {
+            // En caso de error en el procesamiento
+            document.getElementById('progressProcess' + banco).classList.add('d-none');
+            var messageDiv = document.getElementById('messageProcess' + banco);
+            messageDiv.classList.remove('d-none', 'alert-success');
+            messageDiv.classList.add('alert-danger');
+            messageDiv.textContent = 'Error al procesar el archivo: ' + response.message;
+          }
+        }).withFailureHandler(function(error) {
+          // Manejar errores del servidor (si Google Apps Script falla)
+          document.getElementById('progressProcess' + banco).classList.add('d-none');
+          var messageDiv = document.getElementById('messageProcess' + banco);
+          messageDiv.classList.remove('d-none', 'alert-success');
+          messageDiv.classList.add('alert-danger');
+          messageDiv.textContent = 'Error al procesar el archivo: ' + error.message;
+        })
+        .ejecutarProcesamiento(sheetId, banco); // Pasamos el banco como parámetro
+      }
+
+
+    function conciliarRegistros(banco) {
+      var processedSheetId = localStorage.getItem('processedSheetId' + banco);
+
+      if (!processedSheetId) {
+        alert('Por favor, procesa el archivo antes de conciliar.');
+        return;
+      }
+
+      document.getElementById('progressConciliar' + banco).classList.remove('d-none');
+      document.getElementById('messageConciliar' + banco).classList.add('d-none');
+      var progressBar = document.getElementById('progressBar' + banco);
+      var progressBarContainer = document.getElementById('progressBarContainer' + banco);
+      progressBarContainer.classList.remove('d-none');
+
+      let progress = 0;
+      const intervalDuration = 350;  // Intervalo de tiempo: cada 300 ms
+      const totalDuration = 30000;   // Duración total: 30 segundos
+      const maxProgress = 100;        // Llegar hasta el 100%
+      const progressStep = maxProgress / (totalDuration / intervalDuration);  // Incremento necesario en cada intervalo
+
+      // Incrementar el progreso cada `intervalDuration` ms
+      const progressInterval = setInterval(function() {
+        progress += progressStep;  // Incrementos ajustados para llegar al 98% en 30 segundos
+        if (progress >= maxProgress) {
+          progress = maxProgress;  // Limitar al 98% mientras el proceso sigue
+          clearInterval(progressInterval);  // Detener el progreso aquí para que el resto lo maneje el backend
+        }
+
+        progressBar.style.width = progress + '%';
+        progressBar.textContent = Math.floor(progress) + '%';
+
+      }, intervalDuration);
+
+      // Iniciar conciliación y obtener el archivo procesado
+      setTimeout(function() {
+        google.script.run.withSuccessHandler(function(response) {
+          // Completar la barra de progreso al finalizar
+          progressBar.style.width = '100%';
+          progressBar.textContent = '100%';
+
+          document.getElementById('progressConciliar' + banco).classList.add('d-none');
+          document.getElementById('messageConciliar' + banco).classList.remove('d-none');
+
+          if (response.success) {
+            // Mostrar el mensaje de éxito en alerta verde con el enlace al archivo conciliado
+            var messageDiv = document.getElementById('messageConciliar' + banco);
+            messageDiv.classList.remove('d-none', 'alert-danger');
+            messageDiv.classList.add('alert-success');
+            messageDiv.innerHTML = `
+              ${response.message}<br>
+              Se han conciliado el <strong>${response.porcentajeConciliados}% de los registros en Cartola</strong><br>
+            `;  // Añadir el porcentaje de conciliación
+
+            // Crear el enlace para ver el archivo conciliado
+            var link = document.createElement('a');
+            link.href = response.conciledFileUrl;
+            link.textContent = 'Ver archivo conciliado';
+            link.target = '_blank';
+            link.style.marginTop = '10px';  // Añadir margen superior para más separación
+
+            messageDiv.appendChild(link);  // Agregar el enlace al div
+          }
+        }).withFailureHandler(function(error) {
+          document.getElementById('progressConciliar' + banco).classList.add('d-none');
+          alert('Error al conciliar los registros: ' + error.message);
+        }).iniciarConciliacion(processedSheetId, banco);
+      }, 2000);  // Simular un pequeño retraso de 2 segundos antes de llamar al backend
+    }
+    </script>
+  </body>
+</html>
