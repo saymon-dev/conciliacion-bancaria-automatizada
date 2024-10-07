@@ -16,7 +16,7 @@ function uploadToDrive(fileName, fileContent, banco) {
     Logger.log('Iniciando el proceso de subida y conversión del archivo.');
 
     // Obtener el correo del usuario activo
-    var emailUsuario = Session.getActiveUser().getEmail();
+    let emailUsuario = Session.getActiveUser().getEmail();
     Logger.log('Correo del usuario: ' + emailUsuario);
 
     // Restringir el acceso a usuarios de la organización 'hyl.cl'
@@ -81,40 +81,26 @@ function uploadToDrive(fileName, fileContent, banco) {
   }
 }
 
-function obtenerFotoPerfilDesdeUsuarioActivo() {
-  try {
-    // Usamos la API de Google People para obtener la información del usuario activo ('people/me')
-    const people = People.People.get('people/me', { personFields: 'photos' });
+  /**
+   * Obtiene la foto de perfil del usuario activo usando la API de People.
+   * @return {string} URL de la foto de perfil del usuario, o una URL por defecto si no se encuentra.
+   */
+  function obtenerFotoPerfilDesdeUsuarioActivo() {
+    try {
+      // Usamos la API de People para obtener la información del usuario activo ('people/me')
+      const people = People.People.get('people/me', { personFields: 'photos' });
 
-    if (people.photos && people.photos.length > 0) {
-      // Devolver la URL de la primera foto de perfil del usuario
-      return people.photos[0].url;
+      if (people.photos && people.photos.length > 0) {
+        // Devolver la URL de la primera foto de perfil
+        return people.photos[0].url;
+      }
+    } catch (error) {
+      Logger.log('Error al obtener la foto de perfil del usuario activo desde la API de People: ' + error.message);
     }
-  } catch (error) {
-    Logger.log('Error al obtener la foto de perfil del usuario activo: ' + error.message);
+
+    // Si no se encuentra foto o ocurre un error, devolver una URL de imagen por defecto
+    return 'https://www.researchgate.net/publication/315108532/figure/fig1/AS:472492935520261@1489662502634/Figura-2-Avatar-que-aparece-por-defecto-en-Facebook.png';  // Imagen por defecto
   }
-
-  // Si no se encuentra foto o ocurre un error, devolver una URL de imagen por defecto
-  return 'https://www.researchgate.net/publication/315108532/figure/fig1/AS:472492935520261@1489662502634/Figura-2-Avatar-que-aparece-por-defecto-en-Facebook.png';  // Cambiar por una URL de imagen predeterminada
-}
-
-
-function obtenerFotoPerfilDesdeCorreo(email) {
-  try {
-    // Usamos la API de Google People para obtener la información del usuario a partir del correo
-    const person = People.People.get('people/' + email, { personFields: 'photos' });
-
-    if (person.photos && person.photos.length > 0) {
-      // Asegurarse de que la primera foto tenga una URL válida
-      return person.photos[0].url;
-    }
-  } catch (error) {
-    Logger.log('Error al obtener la foto de perfil del usuario con correo: ' + email + '. ' + error.message);
-  }
-
-  // Si no se encuentra foto o ocurre un error, devolver una URL de imagen por defecto
-  return 'https://www.researchgate.net/publication/315108532/figure/fig1/AS:472492935520261@1489662502634/Figura-2-Avatar-que-aparece-por-defecto-en-Facebook.png';  // Cambiar por una URL de imagen predeterminada
-}
 
 
 
@@ -127,14 +113,16 @@ function getActiveUserEmail() {
   return Session.getActiveUser().getEmail();
 }
 
+
+/**
+ * Obtiene la información del usuario activo, incluyendo el correo y la foto de perfil.
+ * @return {object} Un objeto con el correo y la URL de la foto de perfil del usuario.
+ */
 function getUserInfo() {
   const email = getActiveUserEmail();
 
-  // Primer enfoque: Obtener la foto desde el usuario activo
+  // Obtener la foto desde el usuario activo utilizando la API de People
   let photoUrl = obtenerFotoPerfilDesdeUsuarioActivo();
-
-  // Alternativamente, puedes probar el segundo enfoque usando el correo del usuario
-  // let photoUrl = obtenerFotoPerfilDesdeCorreo(email);
 
   return {
     email: email,
