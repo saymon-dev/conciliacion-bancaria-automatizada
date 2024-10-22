@@ -160,7 +160,7 @@ class ConciliadorBCI {
             const nombreArchivo = `Conciliación_Bancaria_BCI_${sufijoFechaHora}`;
             const hojaSalida = SpreadsheetApp.create(nombreArchivo);
             const file = DriveApp.getFileById(hojaSalida.getId());
-            const folder = DriveApp.getFolderById('1YZeYpz9c79GFp8lOfrWgEUHIj0J2LTVt');
+            const folder = DriveApp.getFolderById('1OxwizpiIep2FAiv35SKN8J54N4MfhJst');
             folder.addFile(file);
             DriveApp.getRootFolder().removeFile(file);
 
@@ -208,10 +208,12 @@ function iniciarConciliacionDesdeBotonBCI(sheetId) {
         const cartolaData = cartolaSheet.getRange(2, 1, cartolaSheet.getLastRow() - 1, 5).getValues();
         const libroMayorData = libroMayorSheet.getRange(2, 1, libroMayorSheet.getLastRow() - 1, 8).getValues();
 
+
         const conciliador = new ConciliadorBCI(cartolaData, libroMayorData);
         conciliador.conciliarBCI();
 
         const urlArchivoSalida = conciliador.generarArchivoSalidaBCI();
+        Logger.log('URL Archivo Salida (Banco BCI): ' + urlArchivoSalida);
         const emailUsuario = Session.getActiveUser().getEmail();
         const totalConciliados = conciliador.conciliados.length;
         const totalPendientesCartola = conciliador.pendientesCartola.length;
@@ -219,23 +221,36 @@ function iniciarConciliacionDesdeBotonBCI(sheetId) {
         const totalRegistrosCartola = cartolaData.length;
         const porcentajeConciliados = ((totalConciliados / totalRegistrosCartola) * 100).toFixed(2);
 
+        const asunto = 'Conciliación BANCO BCI - Completada';
+        const mensaje = `
+        Estimado/a, <br><br>
+        La conciliación bancaria para <strong>Banco BCI</strong> ha sido completada exitosamente. <br><br>
+        <strong>Resultado:</strong> <br>
+        Total de registros conciliados: ${totalConciliados} <br>
+        Total de registros pendientes de la cartola: ${totalPendientesCartola} <br>
+        Total de registros pendientes del libro mayor: ${totalPendientesLibroMayor} <br>
+        <strong>Porcentaje de conciliación: ${porcentajeConciliados}%</strong> <br><br>
+        Puede descargar el archivo de conciliación desde el siguiente enlace: <br>
+        <a href="${urlArchivoSalida}" target="_blank">Ver archivo conciliado</a> <br><br>
+        Saludos cordiales, <br>
+        El equipo de Conciliación Bancaria.
+        `;
+
+        // Envía el correo con el formato actualizado para el Banco BCI
         MailApp.sendEmail({
-            to: emailUsuario,
-            subject: 'Conciliación Bancaria BCI Completada',
-            htmlBody: `
-                La conciliación bancaria ha sido completada exitosamente. <br><br>
-                Total de registros conciliados: ${totalConciliados} <br>
-                Pendientes Cartola: ${totalPendientesCartola} <br>
-                Pendientes Libro Mayor: ${totalPendientesLibroMayor} <br>
-                Porcentaje Conciliados: ${porcentajeConciliados}% <br><br>
-                Puede descargar el archivo desde el siguiente enlace: <a href="${urlArchivoSalida}" target="_blank">Ver archivo conciliado</a>
-            `
+        to: emailUsuario,
+        subject: asunto,
+        htmlBody: mensaje
         });
 
+        Logger.log('Correo enviado a: ' + emailUsuario + ' para Banco BCI');
+
+
+        // Devolver el URL correctamente para el frontend
         return {
             success: true,
             message: `Conciliación completada. Correo enviado a ${emailUsuario}`,
-            conciledFileUrl: urlArchivoSalida,
+            conciledFileUrl: urlArchivoSalida, // URL correcta aquí
             totalConciliados,
             totalPendientesCartola,
             totalPendientesLibroMayor,
@@ -249,3 +264,4 @@ function iniciarConciliacionDesdeBotonBCI(sheetId) {
         };
     }
 }
+

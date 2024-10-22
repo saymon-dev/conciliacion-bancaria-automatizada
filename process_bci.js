@@ -132,12 +132,18 @@ class ProcesarArchivosBCI {
     Logger.log('Archivo movido a la carpeta de procesados correctamente.');
 
     const processedFileUrl = outputSS.getUrl();
+    /** 
+    // Enviar notificación por correo con encabezado estandarizado para Banco BCI
+    var banco = 'Banco BCI';
+    var asunto = 'Conciliación Bancaria - ' + banco + ' - Archivo Procesado Correctamente';
+    var mensaje = 'Estimado usuario,<br><br>El archivo de ' + banco + ' ha sido procesado y está listo para ser conciliado. Puede acceder a él en el siguiente enlace: <a href="' + processedFileUrl + '" target="_blank">Ver archivo procesado</a>.<br><br>Atentamente,<br>Equipo de Conciliación Bancaria';
+
     MailApp.sendEmail({
       to: Session.getActiveUser().getEmail(),
-      subject: 'Archivo procesado correctamente',
-      htmlBody: 'El archivo ha sido procesado y está listo para ser conciliado. Puede acceder a él en el siguiente enlace: <a href="' + processedFileUrl + '" target="_blank">Ver archivo procesado</a>'
+      subject: asunto,
+      htmlBody: mensaje
     });
-
+    */
     return {
       success: true,
       message: 'Archivo procesado correctamente. Se ha enviado una notificación al correo: ' + Session.getActiveUser().getEmail(),
@@ -292,8 +298,8 @@ class ProcesarArchivosBCI {
  */
 function ejecutarProcesamientoBCI(sheetId) {
   try {
-    const folderIdOutput = '1r-6r3vhhxAWDKvSgARHxcNp2CuJS7SvX'; // Carpeta de destino (actualiza este valor)
-    const sheetDiasHabilesId = '1ryzTtdCPEz-biB77Drn470D-nM6kCRSgl1MvYU4ud7o'; // Hoja de días hábiles
+    const folderIdOutput = '1JIOKlfWV7j1WkPhP8RojPx-j6TxmuXSw'; // Carpeta de destino (actualiza este valor)
+    const sheetDiasHabilesId = '1nfnwhtho8zy-mwhkaIJ8s_ryw8VnRgeonfRQuPgMSTE'; // Hoja de días hábiles
 
     const procesador = new ProcesarArchivosBCI(sheetId, folderIdOutput, sheetDiasHabilesId);
     return procesador.procesarArchivoSubidoBCI();

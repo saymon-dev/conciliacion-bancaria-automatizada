@@ -6,7 +6,7 @@
     <title>Conciliación Bancaria - Subir y Procesar Archivo</title>
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <style>
 
@@ -130,8 +130,7 @@
     <div class="row">
       <div class="col-12">
         <div id="welcomeMessage" class="d-flex align-items-center">
-          <img id="profilePicture" class="rounded-circle me-2" src="https://via.placeholder.com/40" alt="Foto de perfil" width="40" height="40">
-
+          <img id="profilePicture" class="rounded-circle me-2" src="<?= photoUrl; ?>?t=<?= new Date().getTime(); ?>" alt="Foto de perfil" width="40" height="40">
 
           Bienvenido al sistema,&nbsp;<span id="emailUsuario"><?= email ?></span>
 
@@ -162,7 +161,7 @@
       <div class="tab-pane fade show active" id="banco-estado" role="tabpanel" aria-labelledby="banco-estado-tab">
         <div class="card">
           <div class="card-header text-center">
-            <h3 class="card-title">Conciliación Banco Estado</h3>
+            <h3 class="card-title">Conciliación Banco Estado 🏦</h3>
           </div>
           <div class="card-body text-center">
             <!-- Mensajes de error -->
@@ -188,20 +187,27 @@
               <div class="col-md-6">
                 <h4>Procesar Archivo</h4>
                 <div id="progressProcessEstado" class="alert alert-warning d-none mt-3" role="alert">Procesando archivo...</div>
-                <button type="button" class="btn btn-primary btn-subir-procesar mt-3" id="processButtonEstado" disabled onclick="procesarArchivo('Estado')">Procesar Archivo</button>
+                <button type="button" class="btn btn-secondary btn-subir-procesar mt-3" id="processButtonEstado" disabled onclick="procesarArchivo('Estado')">Procesar Archivo</button>
                 <div id="messageProcessEstado" class="alert alert-success d-none mt-3" role="alert"></div>
+                <p class="text-muted" style="margin-bottom: 10px;">Ya no es necesario presionar el boton 🚫</p>
               </div>
             </div>
 
             <!-- Botón de Conciliación -->
             <div class="row mt-4">
               <div class="col-12">
-                <button type="button" class="btn btn-success btn-lg w-100" id="conciliarButtonEstado" disabled onclick="conciliarRegistros('Estado')" style="margin: 20px 0;">Conciliar Registros</button>
+                <!--<button type="button" class="btn btn-success btn-lg w-100" id="conciliarButtonEstado" disabled onclick="conciliarRegistros('Estado')" style="margin: 20px 0;">Conciliar Registros</button>-->
                 <div id="progressConciliarEstado" class="alert alert-warning d-none mt-3" role="alert">Conciliando registros...</div>
                 <div id="messageConciliarEstado" class="alert alert-success d-none mt-3" role="alert"></div>
                 <div class="progress d-none" id="progressBarContainerEstado">
                   <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" id="progressBarEstado">0%</div>
                 </div>
+              <!-- Botón de Procesamiento y Conciliación para Banco Estado -->
+              <button type="button" class="btn btn-success btn-lg w-100" id="procesarConciliarButtonEstado" disabled onclick="procesarYConciliar('Estado')" style="margin: 20px 0;">Procesar y Conciliar</button>
+              <p class="text-muted" style="margin-bottom: 10px;">Ahora puedes procesar y conciliar con un solo botón 👆🏼✨</p>
+              <!-- Boton para abrir el modal Banco Estado
+              <button type="button" class="btn btn-info btn-lg w-100 d-none" id="guardarConciliacionButtonEstado" disabled onclick="abrirModal('Estado')" style="margin-top: 20px;">Guardar esta Conciliación</button>
+              -->
               </div>
             </div>
           </div>
@@ -212,7 +218,7 @@
       <div class="tab-pane fade" id="banco-bci" role="tabpanel" aria-labelledby="banco-bci-tab">
         <div class="card">
           <div class="card-header text-center">
-            <h3 class="card-title">Conciliación Banco BCI</h3>
+            <h3 class="card-title">Conciliación Banco BCI 🏦</h3>
           </div>
           <div class="card-body text-center">
             <div id="errorMessageBCI" class="alert alert-danger d-none" role="alert">
@@ -235,208 +241,354 @@
               <div class="col-md-6">
                 <h4>Procesar Archivo</h4>
                 <div id="progressProcessBCI" class="alert alert-warning d-none mt-3" role="alert">Procesando archivo...</div>
-                <button type="button" class="btn btn-primary btn-subir-procesar mt-3" id="processButtonBCI" disabled onclick="procesarArchivo('BCI')">Procesar Archivo</button>
+                <button type="button" class="btn btn-secondary btn-subir-procesar mt-3" id="processButtonBCI" disabled onclick="procesarArchivo('BCI')">Procesar Archivo</button>
                 <div id="messageProcessBCI" class="alert alert-success d-none mt-3" role="alert"></div>
+                <p class="text-muted" style="margin-bottom: 10px;">Ya no es necesario presionar el boton 🚫</p>
               </div>
             </div>
 
             <div class="row mt-4">
               <div class="col-12">
-                <button type="button" class="btn btn-success btn-lg w-100" id="conciliarButtonBCI" disabled onclick="conciliarRegistros('BCI')" style="margin: 20px 0;">Conciliar Registros</button>
+                <!-- <button type="button" class="btn btn-success btn-lg w-100" id="conciliarButtonBCI" disabled onclick="conciliarRegistros('BCI')" style="margin: 20px 0;">Conciliar Registros</button> --->
                 <div id="progressConciliarBCI" class="alert alert-warning d-none mt-3" role="alert">Conciliando registros...</div>
                 <div id="messageConciliarBCI" class="alert alert-success d-none mt-3" role="alert"></div>
                 <div class="progress d-none" id="progressBarContainerBCI">
                   <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" id="progressBarBCI">0%</div>
                 </div>
+                <!-- Botón de Procesamiento y Conciliación para Banco BCI -->
+                <button type="button" class="btn btn-success btn-lg w-100" id="procesarConciliarButtonBCI" disabled onclick="procesarYConciliar('BCI')" style="margin: 20px 0;">Procesar y Conciliar</button>
+                <p class="text-muted" style="margin-bottom: 10px;">Ahora puedes procesar y conciliar con un solo botón 👆🏼✨</p>
+                <!-- Botón para Guardar la Conciliación 
+                <button type="button" class="btn btn-info btn-lg w-100 d-none" id="guardarConciliacionButtonBCI" disabled onclick="abrirModal('BCI')" style="margin-top: 20px;">Guardar esta Conciliación</button>
+                -->
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!-- Modal para Guardar Conciliación -->
+    <div class="modal fade" id="guardarConciliacionModal" tabindex="-1" aria-labelledby="guardarConciliacionLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="guardarConciliacionLabel">Guardar Conciliación</h5>
+            <button type="button" class="btn-close" onclick="cerrarModal()" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="guardarConciliacionForm">
+              <div class="mb-3">
+                <label for="nombreConciliacion" class="form-label">Nombre de la Conciliación</label>
+                <input type="text" class="form-control" id="nombreConciliacion" placeholder="Escribe un nombre para la conciliación" required>
+              </div>
+              <input type="hidden" id="emailUsuarioModal" value="">
+              <input type="hidden" id="urlArchivoConciliado" value="">
+              <input type="hidden" id="bancoConciliacion" value="">
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+            <button type="button" class="btn btn-primary" onclick="guardarConciliacion()">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <!-- Tabla para mostrar las conciliaciones guardadas
+    <div id="conciliacionesGuardadas" class="mt-5">
+      <h4 style="background-color: black; color: white; padding: 10px;">Conciliaciones Guardadas</h4>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Fecha</th>
+            <th>Correo</th>
+            <th>URL</th>
+            <th>Banco</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tablaConciliaciones">
+        </tbody>
+      </table>
+    </div>
   </div>
+    -->
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <!-- JavaScript para manejar el flujo de la aplicación -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        google.script.run.withSuccessHandler(function(userInfo) {
-          const { email, photoUrl } = userInfo;
+<script>
+// Este código se ejecuta cuando el DOM esté completamente cargado.
+document.addEventListener("DOMContentLoaded", function() {
+  google.script.run.withSuccessHandler(function(userInfo) {
+    const { email, photoUrl } = userInfo;
 
-          if (email.endsWith('@hyl.cl')) {
-            document.getElementById('welcomeMessage').classList.remove('d-none');
-            document.getElementById('emailUsuario').textContent = email;
+    if (email.endsWith('@hyl.cl')) {
+      document.getElementById('welcomeMessage').classList.remove('d-none');
+      document.getElementById('emailUsuario').textContent = email;
 
-            if (photoUrl) {
-              document.getElementById('profilePicture').src = photoUrl;
-            } else {
-              document.getElementById('profilePicture').src = 'https://via.placeholder.com/40';
-              // Mostrar una alerta indicando que no se encontró la URL de la foto de perfil
-              alert('No photo URL found, using placeholder.');
-            }
-          } else {
-            document.getElementById('errorMessageEstado').classList.remove('d-none');
-            document.getElementById('errorMessageBCI').classList.remove('d-none');
-            document.querySelectorAll('button').forEach(button => button.disabled = true);
-          }
-        }).getUserInfo();
-      });
-
-      function uploadFile(banco) {
-        var fileInput = document.getElementById('fileUpload' + banco);
-        var file = fileInput.files[0];
-
-        if (!file) {
-          alert('Por favor, selecciona un archivo.');
-          return;
-        }
-
-        document.getElementById('progressUpload' + banco).classList.remove('d-none');
-        document.getElementById('messageUpload' + banco).classList.add('d-none');
-
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          var fileContent = e.target.result;
-          google.script.run.withSuccessHandler(function(response) {
-            document.getElementById('progressUpload' + banco).classList.add('d-none');
-            document.getElementById('messageUpload' + banco).innerHTML = response.message + ' <a href="' + response.sheetUrl + '" target="_blank">Ver archivo subido</a>';
-            document.getElementById('messageUpload' + banco).classList.remove('d-none');
-            localStorage.setItem('sheetId' + banco, response.sheetId);
-            document.getElementById("processButton" + banco).disabled = false;
-          }).withFailureHandler(function(error) {
-            document.getElementById('progressUpload' + banco).classList.add('d-none');
-            alert('Error al subir el archivo: ' + error.message);
-          }).uploadToDrive(file.name, fileContent, banco);
-        };
-
-        reader.readAsDataURL(file);
+      if (photoUrl) {
+        document.getElementById('profilePicture').src = photoUrl;
+      } else {
+        document.getElementById('profilePicture').src = 'https://via.placeholder.com/40';
       }
-
-      function procesarArchivo(banco) {
-        var sheetId = localStorage.getItem('sheetId' + banco);
-
-        if (!sheetId) {
-          alert('Por favor, sube un archivo antes de procesarlo.');
-          return;
-        }
-
-        document.getElementById('progressProcess' + banco).classList.remove('d-none');
-        document.getElementById('messageProcess' + banco).classList.add('d-none');
-
-        google.script.run.withSuccessHandler(function(response) {
-          // Si el procesamiento fue exitoso
-          if (response.success) {
-            // Guardar el ID de la hoja procesada en el localStorage
-            localStorage.setItem('processedSheetId' + banco, response.processedSheetId);
-
-            // Ocultar la barra de progreso
-            document.getElementById('progressProcess' + banco).classList.add('d-none');
-
-            // Mostrar el mensaje de éxito en alerta verde
-            var messageDiv = document.getElementById('messageProcess' + banco);
-            messageDiv.classList.remove('d-none', 'alert-danger');
-            messageDiv.classList.add('alert-success');
-            messageDiv.innerHTML = response.message + ' <br>';
-
-            // Crear el enlace para ver el archivo procesado
-            var link = document.createElement('a');
-            link.href = response.processedFileUrl;
-            link.textContent = 'Ver archivo procesado';
-            link.target = '_blank'; // Para abrir en una nueva pestaña
-            messageDiv.appendChild(link);
-
-            // Habilitar el botón de conciliación
-            document.getElementById("conciliarButton" + banco).disabled = false;
-          } else {
-            // En caso de error en el procesamiento
-            document.getElementById('progressProcess' + banco).classList.add('d-none');
-            var messageDiv = document.getElementById('messageProcess' + banco);
-            messageDiv.classList.remove('d-none', 'alert-success');
-            messageDiv.classList.add('alert-danger');
-            messageDiv.textContent = 'Error al procesar el archivo: ' + response.message;
-          }
-        }).withFailureHandler(function(error) {
-          // Manejar errores del servidor (si Google Apps Script falla)
-          document.getElementById('progressProcess' + banco).classList.add('d-none');
-          var messageDiv = document.getElementById('messageProcess' + banco);
-          messageDiv.classList.remove('d-none', 'alert-success');
-          messageDiv.classList.add('alert-danger');
-          messageDiv.textContent = 'Error al procesar el archivo: ' + error.message;
-        })
-        .ejecutarProcesamiento(sheetId, banco); // Pasamos el banco como parámetro
-      }
-
-
-    function conciliarRegistros(banco) {
-      var processedSheetId = localStorage.getItem('processedSheetId' + banco);
-
-      if (!processedSheetId) {
-        alert('Por favor, procesa el archivo antes de conciliar.');
-        return;
-      }
-
-      document.getElementById('progressConciliar' + banco).classList.remove('d-none');
-      document.getElementById('messageConciliar' + banco).classList.add('d-none');
-      var progressBar = document.getElementById('progressBar' + banco);
-      var progressBarContainer = document.getElementById('progressBarContainer' + banco);
-      progressBarContainer.classList.remove('d-none');
-
-      let progress = 0;
-      const intervalDuration = 350;  // Intervalo de tiempo: cada 300 ms
-      const totalDuration = 30000;   // Duración total: 30 segundos
-      const maxProgress = 100;        // Llegar hasta el 100%
-      const progressStep = maxProgress / (totalDuration / intervalDuration);  // Incremento necesario en cada intervalo
-
-      // Incrementar el progreso cada `intervalDuration` ms
-      const progressInterval = setInterval(function() {
-        progress += progressStep;  // Incrementos ajustados para llegar al 98% en 30 segundos
-        if (progress >= maxProgress) {
-          progress = maxProgress;  // Limitar al 98% mientras el proceso sigue
-          clearInterval(progressInterval);  // Detener el progreso aquí para que el resto lo maneje el backend
-        }
-
-        progressBar.style.width = progress + '%';
-        progressBar.textContent = Math.floor(progress) + '%';
-
-      }, intervalDuration);
-
-      // Iniciar conciliación y obtener el archivo procesado
-      setTimeout(function() {
-        google.script.run.withSuccessHandler(function(response) {
-          // Completar la barra de progreso al finalizar
-          progressBar.style.width = '100%';
-          progressBar.textContent = '100%';
-
-          document.getElementById('progressConciliar' + banco).classList.add('d-none');
-          document.getElementById('messageConciliar' + banco).classList.remove('d-none');
-
-          if (response.success) {
-            // Mostrar el mensaje de éxito en alerta verde con el enlace al archivo conciliado
-            var messageDiv = document.getElementById('messageConciliar' + banco);
-            messageDiv.classList.remove('d-none', 'alert-danger');
-            messageDiv.classList.add('alert-success');
-            messageDiv.innerHTML = `
-              ${response.message}<br>
-              Se han conciliado el <strong>${response.porcentajeConciliados}% de los registros en Cartola</strong><br>
-            `;  // Añadir el porcentaje de conciliación
-
-            // Crear el enlace para ver el archivo conciliado
-            var link = document.createElement('a');
-            link.href = response.conciledFileUrl;
-            link.textContent = 'Ver archivo conciliado';
-            link.target = '_blank';
-            link.style.marginTop = '10px';  // Añadir margen superior para más separación
-
-            messageDiv.appendChild(link);  // Agregar el enlace al div
-          }
-        }).withFailureHandler(function(error) {
-          document.getElementById('progressConciliar' + banco).classList.add('d-none');
-          alert('Error al conciliar los registros: ' + error.message);
-        }).iniciarConciliacion(processedSheetId, banco);
-      }, 2000);  // Simular un pequeño retraso de 2 segundos antes de llamar al backend
+    } else {
+      document.getElementById('errorMessageEstado').classList.remove('d-none');
+      document.getElementById('errorMessageBCI').classList.remove('d-none');
+      document.querySelectorAll('button').forEach(button => button.disabled = true);
     }
-    </script>
-  </body>
+  }).getUserInfo();
+});
+
+// Función para subir el archivo al servidor
+function uploadFile(banco) {
+  console.log("Banco seleccionado:", banco); // Verificar que el banco sea el correcto
+  var fileInput = document.getElementById('fileUpload' + banco);
+  
+  if (!fileInput) {
+    console.error("No se encontró el campo de archivo para el banco:", banco);
+    return;
+  }
+
+  var file = fileInput.files[0];
+  if (!file) {
+    alert('Por favor, selecciona un archivo.');
+    return;
+  }
+
+  console.log("Archivo seleccionado:", file.name); // Verificar que el archivo se seleccionó correctamente
+  document.getElementById('progressUpload' + banco).classList.remove('d-none');
+  document.getElementById('messageUpload' + banco).classList.add('d-none');
+
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var fileContent = e.target.result;
+    var base64Content = fileContent.split(',')[1];
+    
+    console.log("Contenido Base64 del archivo:", base64Content); // Verificar el contenido del archivo
+
+    google.script.run.withSuccessHandler(function(response) {
+      console.log("Archivo subido con éxito:", response);
+      document.getElementById('progressUpload' + banco).classList.add('d-none');
+      document.getElementById('messageUpload' + banco).innerHTML = response.message + 
+        ' <a href="' + response.sheetUrl + '" target="_blank">Ver archivo subido</a>';
+      document.getElementById('messageUpload' + banco).classList.remove('d-none');
+      localStorage.setItem('sheetId' + banco, response.sheetId);
+      document.getElementById("procesarConciliarButton" + banco).disabled = false;
+    }).withFailureHandler(function(error) {
+      console.error("Error al subir el archivo:", error);
+      document.getElementById('progressUpload' + banco).classList.add('d-none');
+      alert('Error al subir el archivo: ' + error.message);
+    }).uploadToDrive(file.name, base64Content, banco);
+  };
+
+  reader.readAsDataURL(file);
+}
+
+
+// Función para procesar el archivo
+function procesarArchivo(banco) {
+  var sheetId = localStorage.getItem('sheetId' + banco);
+
+  if (!sheetId) {
+    manejarMensaje('messageProcess' + banco, 'danger', 'Por favor, sube un archivo antes de procesarlo.', true);
+    return;
+  }
+
+  manejarMensaje('messageProcess' + banco, 'info', 'Procesando archivo...', true);
+
+  // Iniciar el procesamiento real y actualizar el progreso
+  google.script.run.withSuccessHandler(function(response) {
+    if (response.success) {
+      localStorage.setItem('processedSheetId' + banco, response.processedSheetId);
+      manejarMensaje('messageProcess' + banco, 'success', 'Procesamiento completado con éxito.', true);
+
+      actualizarProgreso(banco, 50); // Solo se maneja el progreso si se llama de forma individual
+
+      document.getElementById("conciliarButton" + banco).disabled = false;
+    } else {
+      manejarMensaje('messageProcess' + banco, 'danger', 'Error en el procesamiento.', true);
+    }
+  }).withFailureHandler(function(error) {
+    manejarMensaje('messageProcess' + banco, 'danger', 'Error al procesar el archivo: ' + error.message, true);
+  }).ejecutarProcesamiento(sheetId, banco);
+}
+
+
+// Función para conciliar los registros
+function conciliarRegistros(banco) {
+  var processedSheetId = localStorage.getItem('processedSheetId' + banco);
+
+  if (!processedSheetId) {
+    manejarMensaje('messageConciliar' + banco, 'danger', 'Por favor, procesa el archivo antes de conciliar.', true);
+    return;
+  }
+
+  manejarMensaje('messageConciliar' + banco, 'info', 'Iniciando conciliación...', true);
+
+  // Iniciar la conciliación real y actualizar el progreso
+  google.script.run.withSuccessHandler(function(responseConciliacion) {
+    if (responseConciliacion.success) {
+      actualizarProgreso(banco, 100);  // Completar progreso al 100%
+      manejarMensaje('messageConciliar' + banco, 'success', `
+        ${responseConciliacion.message}<br>
+        Se han conciliado el <strong>${responseConciliacion.porcentajeConciliados}% de los registros en Cartola</strong>.<br>
+        El archivo conciliado ha sido enviado al correo: <strong>${responseConciliacion.emailUsuario}</strong><br>
+        <a href="${responseConciliacion.conciledFileUrl}" target="_blank">Ver archivo conciliado</a>
+      `, true);
+    } else {
+      manejarMensaje('messageConciliar' + banco, 'danger', responseConciliacion.message, true);
+    }
+  }).withFailureHandler(function(error) {
+    manejarMensaje('messageConciliar' + banco, 'danger', 'Error al conciliar los registros: ' + error.message, true);
+  }).iniciarConciliacion(processedSheetId, banco);
+}
+
+
+// Función para procesar y conciliar
+function procesarYConciliar(banco) {
+  var sheetId = localStorage.getItem('sheetId' + banco);
+
+  if (!sheetId) {
+    manejarMensaje('messageConciliar' + banco, 'danger', 'Por favor, sube un archivo antes de procesar y conciliar.', true);
+    return;
+  }
+
+  const botonProcesarConciliar = document.getElementById('procesarConciliarButton' + banco);
+  botonProcesarConciliar.disabled = true;
+
+  // Iniciar con un mensaje de procesamiento
+  manejarMensaje('messageConciliar' + banco, 'info', 'Ejecutando procesamiento de datos...', true);
+
+  // Mostrar la barra de progreso al iniciar
+  document.getElementById('progressBarContainer' + banco).classList.remove('d-none');
+  actualizarProgreso(banco, 0);  // Reiniciar barra al 0%
+
+  // Llamada a la función procesarYConciliarGestionado en el backend
+  google.script.run.withSuccessHandler(function(response) {
+    console.log("Respuesta del servidor:", response);  // Depuración
+    if (response.success) {
+      console.log("Procesamiento exitoso. Iniciando conciliación...");  // Depuración
+      // Procesamiento completado, actualizar mensaje y progreso
+      manejarMensaje('messageConciliar' + banco, 'info', 'Procesamiento completado. Ejecutando conciliación...', true);
+      actualizarProgreso(banco, 50);
+
+      // Cuando la conciliación se complete con éxito, actualizamos al 100%
+      manejarMensaje('messageConciliar' + banco, 'info', 'Conciliación en progreso...', true);
+
+      // Proceso exitoso, actualizar al 100% y mostrar el archivo conciliado
+      actualizarProgreso(banco, 100);
+      manejarMensaje('messageConciliar' + banco, 'success', `
+        ${response.message}<br>
+        Se han conciliado el <strong>${response.porcentajeConciliados}% de los registros en Cartola</strong>.<br>
+        El archivo conciliado ha sido enviado al correo: <strong>${response.emailUsuario}</strong><br>
+        <a href="${response.conciledFileUrl}" target="_blank">Ver archivo conciliado</a>
+      `, true);
+
+      // Ocultar la barra de progreso al completar
+      setTimeout(function() {
+        document.getElementById('progressBarContainer' + banco).classList.add('d-none');
+      }, 500);
+
+      // Habilitar botón de guardar
+      document.getElementById("guardarConciliacionButton" + banco).disabled = false;
+
+    } else {
+      // En caso de error
+      manejarMensaje('messageConciliar' + banco, 'danger', response.message, true);
+      detenerProgreso(banco);  // Detener el progreso en caso de error
+      document.getElementById('progressBarContainer' + banco).classList.add('d-none');  // Ocultar la barra de progreso en caso de error
+    }
+    botonProcesarConciliar.disabled = false;  // Habilitar el botón de nuevo después del proceso
+  }).withFailureHandler(function(error) {
+    // Manejar errores de comunicación con el backend
+    manejarMensaje('messageConciliar' + banco, 'danger', 'Error en la comunicación con el servidor: ' + error.message, true);
+    detenerProgreso(banco);  // Detener el progreso
+    document.getElementById('progressBarContainer' + banco).classList.add('d-none');  // Ocultar la barra de progreso
+    botonProcesarConciliar.disabled = false;  // Habilitar el botón en caso de error
+  }).procesarYConciliarGestionado(sheetId, banco);  // Ejecuta la función en el backend
+
+  // Simula el progreso mientras el procesamiento está en marcha
+  simularProgreso(banco, 0, 99, 70000);  // Simulación de progreso del 0% al 99% durante 60 segundos
+}
+
+
+
+// Función para manejar los mensajes y errores
+function manejarMensaje(elementId, tipo, mensaje, mostrar = true) {
+  const element = document.getElementById(elementId);
+  if (mostrar) {
+    element.classList.remove('d-none', 'alert-success', 'alert-danger', 'alert-info', 'alert-warning');
+    element.classList.add('alert-' + tipo);
+    element.innerHTML = mensaje;
+  } else {
+    element.classList.add('d-none');
+  }
+}
+
+let intervalosProgreso = {};  // Almacenará los intervalos para cada banco, para poder detenerlos
+
+// Función para simular el progreso sin bloquear el flujo principal
+function simularProgreso(banco, inicio, fin, duracion) {
+  let progreso = inicio;
+  let incremento = (fin - inicio) / (duracion / 1000);  // Incremento por cada segundo
+
+  // Guardamos el intervalo en un objeto para poder detenerlo luego si ocurre un error
+  intervalosProgreso[banco] = setInterval(function() {
+    progreso += incremento;
+
+    if (progreso >= fin) {
+      progreso = fin;
+      clearInterval(intervalosProgreso[banco]);  // Detener el intervalo cuando se alcance el límite
+    }
+
+    actualizarProgreso(banco, progreso);
+  }, 1000);  // Incrementar cada 1 segundo
+}
+
+// Función para detener el progreso
+function detenerProgreso(banco) {
+  if (intervalosProgreso[banco]) {
+    clearInterval(intervalosProgreso[banco]);
+    delete intervalosProgreso[banco];
+  }
+}
+
+// Función para actualizar la barra de progreso
+function actualizarProgreso(banco, porcentaje) {
+  const progressBar = document.getElementById('progressBar' + banco);
+  if (progressBar) {
+    // Redondear el porcentaje a enteros (sin decimales)
+    let porcentajeRedondeado = Math.round(porcentaje); // Cambiar para mostrar solo enteros
+    progressBar.style.width = porcentajeRedondeado + '%';
+    progressBar.textContent = porcentajeRedondeado + '%';
+  }
+}
+
+// Función para limpiar todas las alertas y mensajes en pantalla
+function limpiarMensajes() {
+  // Limpiar el contenido de los mensajes y ocultar las alertas
+  document.getElementById('messageConciliarEstado').innerHTML = '';
+  document.getElementById('messageConciliarBCI').innerHTML = '';
+  document.getElementById('progressConciliarEstado').classList.add('d-none');
+  document.getElementById('progressConciliarBCI').classList.add('d-none');
+  document.getElementById('messageConciliarEstado').classList.add('d-none');
+  document.getElementById('messageConciliarBCI').classList.add('d-none');
+
+  // Reiniciar la barra de progreso (si se usa una)
+  actualizarProgreso('Estado', 0);
+  actualizarProgreso('BCI', 0);
+
+  // También puedes reiniciar otros elementos o botones si es necesario
+  document.getElementById("conciliarButtonEstado").disabled = true;
+  document.getElementById("conciliarButtonBCI").disabled = true;
+}
+
+</script>
+
+
+
+</body>
 </html>

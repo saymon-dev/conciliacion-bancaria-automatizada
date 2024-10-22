@@ -94,7 +94,8 @@ class ProcesarArchivosEstado {
 
       // Obtener el enlace al archivo procesado
       var processedFileUrl = outputSS.getUrl();
-
+      
+/*
       // Enviar notificación por correo
       var asunto = 'Archivo procesado correctamente';
       var mensaje = 'El archivo ha sido procesado y está listo para ser conciliado. Puede acceder a él en el siguiente enlace: <a href="' + processedFileUrl + '" target="_blank">Ver archivo procesado</a>';
@@ -105,7 +106,7 @@ class ProcesarArchivosEstado {
       });
 
       Logger.log('Correo enviado a: ' + Session.getActiveUser().getEmail());
-
+*/
       return {
         success: true,
         message: 'Archivo procesado correctamente. Se ha enviado una notificación al correo: ' + Session.getActiveUser().getEmail(),
@@ -235,8 +236,8 @@ class ProcesarArchivosEstado {
 function ejecutarProcesamientoEstado(sheetId) {
   try {
     // Define el ID de la carpeta de salida y la hoja de días hábiles (ajusta si es necesario)
-    var folderIdOutput = '1WxA_WUIXKyiBxE6_BLCCBUB-87bqiwWO';  // ID de la carpeta de salida
-    var sheetDiasHabilesId = '1ryzTtdCPEz-biB77Drn470D-nM6kCRSgl1MvYU4ud7o';  // ID de la hoja de días hábiles
+    var folderIdOutput = '1CV6A-Ha2xSVUcdymizH8GDwZiSheA_Bw';  // ID de la carpeta de salida
+    var sheetDiasHabilesId = '1nfnwhtho8zy-mwhkaIJ8s_ryw8VnRgeonfRQuPgMSTE';  // ID de la hoja de días hábiles
 
     // Crear una instancia de la clase ProcesarArchivosEstado
     var procesador = new ProcesarArchivosEstado(sheetId, folderIdOutput, sheetDiasHabilesId);
